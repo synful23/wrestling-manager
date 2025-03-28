@@ -1,0 +1,148 @@
+/* src/ui/styles.css */
+/* Custom styles for the Wrestling Manager application */
+
+html, body {
+    height: 100%;
+    overflow: hidden;
+  }
+  
+  #app-container {
+    height: 100vh;
+    overflow: hidden;
+  }
+  
+  .sidebar {
+    height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .content-area {
+    height: 100vh;
+    overflow-y: auto;
+  }
+  
+  .nav-pills .nav-link {
+    border-radius: 0.25rem;
+    margin-bottom: 0.25rem;
+    transition: all 0.2s ease;
+  }
+  
+  .nav-pills .nav-link:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+  
+  .nav-pills .nav-link.active {
+    background-color: #0d6efd;
+  }
+  
+  .stat-bar {
+    height: 15px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    margin: 5px 0;
+    overflow: hidden;
+  }
+  
+  .stat-value {
+    height: 100%;
+    background-color: #0d6efd;
+  }
+  
+  .notification-toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+    min-width: 300px;
+    max-width: 500px;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Card hover effects */
+  .card {
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  }
+  
+  .card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+  
+  /* Progress bar animations */
+  .progress-bar {
+    transition: width 1s ease;
+  }
+  
+  /* Button icons alignment */
+  .btn i {
+    vertical-align: -0.125em;
+  }
+  
+  /* Form styling */
+  .form-range::-webkit-slider-thumb {
+    background: #0d6efd;
+  }
+  
+  .form-range::-moz-range-thumb {
+    background: #0d6efd;
+  }
+  
+  .form-range::-ms-thumb {
+    background: #0d6efd;
+  }
+  
+  /* Dashboard card styling */
+  .dashboard-stat-card {
+    border-radius: 0.5rem;
+    border: none;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  }
+  
+  .dashboard-stat-card .card-body {
+    padding: 1.5rem;
+  }
+  
+  .dashboard-stat-card h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  
+  /* Animation for loading data */
+  .loading-spinner {
+    display: inline-block;
+    width: 2rem;
+    height: 2rem;
+    border: 0.25rem solid rgba(0, 0, 0, 0.1);
+    border-right-color: #0d6efd;
+    border-radius: 50%;
+    animation: spinner-border 0.75s linear infinite;
+  }
+  
+  @keyframes spinner-border {
+    to { transform: rotate(360deg); }
+  }
+  
+  /* Status badge styling */
+  .badge {
+    font-weight: 500;
+    padding: 0.35em 0.65em;
+  }
