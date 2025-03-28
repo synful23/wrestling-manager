@@ -1,0 +1,42 @@
+/* src/styles.css */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    color: #333;
+  }
+  
+  header {
+    background-color: #2c3e50;
+    color: white;
+    padding: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .wrestler-card {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .stat-bar {
+    height: 10px;
+    background-color: #e9ecef;
+    border-radius: 4px;
+    margin: 5px 0;
+    overflow: hidden;
+  }
+  
+  .stat-value {
+    height: 100%;
+    background-color: #007bff;
+  }
+  
+  .nav-link.active {
+    background-color: #007bff;
+    color: white;
+  }
