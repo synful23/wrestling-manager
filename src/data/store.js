@@ -2,7 +2,7 @@
 const fs = require('fs');
 const path = require('path');
 const { app } = require('electron');
-const { Wrestler, Championship, Event, Promotion } = require('../models');
+const { Wrestler, Championship, Event, Promotion, Settings } = require('../models');
 
 /**
  * Game Data Store
@@ -24,6 +24,7 @@ class GameDataStore {
     this.championships = [];
     this.events = [];
     this.promotions = [];
+    this.settings = new Settings();
     this.gameState = {
       currentDate: new Date().toISOString(),
       playerPromotionId: null,
@@ -34,6 +35,7 @@ class GameDataStore {
     
     // Save file path
     this.saveFilePath = path.join(this.dataPath, 'save-data.json');
+    this.settingsFilePath = path.join(this.dataPath, 'settings.json');
   }
   
   /**
@@ -41,11 +43,93 @@ class GameDataStore {
    * @param {boolean} loadExisting - Whether to try loading existing save
    */
   init(loadExisting = true) {
+    // First try to load settings
+    this.loadSettings();
+    
     if (loadExisting && fs.existsSync(this.saveFilePath)) {
       return this.loadGame();
     } else {
       return this.createNewGame();
     }
+  }
+  
+  /**
+   * Load settings from file
+   */
+  loadSettings() {
+    try {
+      if (fs.existsSync(this.settingsFilePath)) {
+        const settingsData = JSON.parse(fs.readFileSync(this.settingsFilePath, 'utf8'));
+        this.settings = Settings.fromJSON(settingsData);
+        console.log('Settings loaded successfully');
+      } else {
+        this.settings = new Settings();
+        this.saveSettings();
+        console.log('Created default settings');
+      }
+      return {
+        success: true,
+        message: 'Settings loaded successfully'
+      };
+    } catch (error) {
+      console.error('Error loading settings:', error);
+      this.settings = new Settings();
+      return {
+        success: false,
+        message: `Error loading settings: ${error.message}`
+      };
+    }
+  }
+  
+  /**
+   * Save settings to file
+   */
+  saveSettings() {
+    try {
+      fs.writeFileSync(this.settingsFilePath, JSON.stringify(this.settings.toJSON(), null, 2));
+      return {
+        success: true,
+        message: 'Settings saved successfully'
+      };
+    } catch (error) {
+      console.error('Error saving settings:', error);
+      return {
+        success: false,
+        message: `Error saving settings: ${error.message}`
+      };
+    }
+  }
+  
+  /**
+   * Update game settings
+   * @param {Object} newSettings - New settings data
+   */
+  updateSettings(newSettings) {
+    this.settings.updateSettings(newSettings);
+    
+    // Update game difficulty if included in settings
+    if (newSettings.difficulty) {
+      this.gameState.difficulty = newSettings.difficulty;
+    }
+    
+    // Save updated settings
+    return this.saveSettings();
+  }
+  
+  /**
+   * Reset settings to defaults
+   */
+  resetSettings() {
+    this.settings.resetToDefaults();
+    return this.saveSettings();
+  }
+  
+  /**
+   * Get current settings
+   * @return {Object} Current settings
+   */
+  getSettings() {
+    return this.settings;
   }
   
   /**
@@ -474,6 +558,11 @@ class GameDataStore {
     
     // Process weekly events, updates, etc.
     // This would include running shows, updating stats, etc.
+    
+    // Auto-save if enabled
+    if (this.settings.autosave.enabled && this.settings.autosave.frequency === 'weekly') {
+      this.saveGame();
+    }
     
     return {
       success: true,

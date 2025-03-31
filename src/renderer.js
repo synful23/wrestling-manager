@@ -27,5 +27,10 @@ window.gameAPI = {
   saveGame: () => ipcRenderer.invoke('save-game'),
   loadGame: () => ipcRenderer.invoke('load-game'),
   newGame: () => ipcRenderer.invoke('new-game'),
-  advanceWeek: () => ipcRenderer.invoke('advance-week')
+  advanceWeek: () => ipcRenderer.invoke('advance-week'),
+  
+  // Settings
+  getSettings: () => ipcRenderer.invoke('get-settings'),
+  updateSettings: (newSettings) => ipcRenderer.invoke('update-settings', newSettings),
+  resetSettings: () => ipcRenderer.invoke('reset-settings')
 };

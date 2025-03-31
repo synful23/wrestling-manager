@@ -146,3 +146,150 @@ html, body {
     font-weight: 500;
     padding: 0.35em 0.65em;
   }
+
+  /* Dark theme styles - add to src/ui/styles.css */
+
+/* Dark theme variables */
+:root {
+    --light-bg: #f5f5f5;
+    --light-card-bg: #ffffff;
+    --light-text: #333333;
+    --light-border: #dee2e6;
+    --light-input-bg: #ffffff;
+    
+    --dark-bg: #1e1e2d;
+    --dark-card-bg: #2c2c3a;
+    --dark-text: #e6e6e6;
+    --dark-border: #40475a;
+    --dark-input-bg: #3a3a4e;
+  }
+  
+  /* Dark theme class */
+  body.dark-theme {
+    background-color: var(--dark-bg);
+    color: var(--dark-text);
+  }
+  
+  /* Sidebar styling for dark theme */
+  body.dark-theme .sidebar {
+    background-color: #181825;
+  }
+  
+  /* Card styling for dark theme */
+  body.dark-theme .card {
+    background-color: var(--dark-card-bg);
+    border-color: var(--dark-border);
+  }
+  
+  body.dark-theme .card-header {
+    background-color: rgba(0, 0, 0, 0.2);
+    border-color: var(--dark-border);
+  }
+  
+  /* Form control styling for dark theme */
+  body.dark-theme .form-control,
+  body.dark-theme .form-select,
+  body.dark-theme .input-group-text {
+    background-color: var(--dark-input-bg);
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+  }
+  
+  body.dark-theme .form-control:focus,
+  body.dark-theme .form-select:focus {
+    background-color: var(--dark-input-bg);
+    color: var(--dark-text);
+  }
+  
+  /* Table styling for dark theme */
+  body.dark-theme .table {
+    color: var(--dark-text);
+  }
+  
+  body.dark-theme .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.15);
+  }
+  
+  body.dark-theme .table-hover tbody tr:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Modal styling for dark theme */
+  body.dark-theme .modal-content {
+    background-color: var(--dark-card-bg);
+    border-color: var(--dark-border);
+  }
+  
+  body.dark-theme .modal-header,
+  body.dark-theme .modal-footer {
+    border-color: var(--dark-border);
+  }
+  
+  /* List group styling for dark theme */
+  body.dark-theme .list-group-item {
+    background-color: var(--dark-card-bg);
+    border-color: var(--dark-border);
+    color: var(--dark-text);
+  }
+  
+  body.dark-theme .list-group-item-action:hover,
+  body.dark-theme .list-group-item-action:focus {
+    background-color: rgba(0, 0, 0, 0.2);
+    color: var(--dark-text);
+  }
+  
+  /* Form text and placeholder for dark theme */
+  body.dark-theme .form-text {
+    color: #a0a0b8;
+  }
+  
+  body.dark-theme .form-control::placeholder {
+    color: #8d8da5;
+  }
+  
+  /* Progress bar background for dark theme */
+  body.dark-theme .progress {
+    background-color: #3a3a4e;
+  }
+  
+  /* Range input for dark theme */
+  body.dark-theme .form-range::-webkit-slider-thumb {
+    background-color: #007bff;
+  }
+  
+  body.dark-theme .form-range::-moz-range-thumb {
+    background-color: #007bff;
+  }
+  
+  body.dark-theme .form-range::-webkit-slider-runnable-track {
+    background-color: #3a3a4e;
+  }
+  
+  body.dark-theme .form-range::-moz-range-track {
+    background-color: #3a3a4e;
+  }
+  
+  /* Dropdown styling for dark theme */
+  body.dark-theme .dropdown-menu {
+    background-color: var(--dark-card-bg);
+    border-color: var(--dark-border);
+  }
+  
+  body.dark-theme .dropdown-item {
+    color: var(--dark-text);
+  }
+  
+  body.dark-theme .dropdown-item:hover,
+  body.dark-theme .dropdown-item:focus {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Navbar styling for dark theme */
+  body.dark-theme .navbar {
+    background-color: #181825;
+  }
+  
+  /* Apply theme when setting is chosen */
+  .theme-switch {
+    transition: all 0.3s ease;
+  }

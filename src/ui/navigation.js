@@ -919,17 +919,21 @@ class NavigationManager {
       `;
     }
   
-    /**
-     * Load the settings section
-     */
-    loadSettings() {
-      const contentContainer = document.getElementById('content-container');
+/**
+ * Load the settings section
+ */
+async loadSettings() {
+    const contentContainer = document.getElementById('content-container');
+    
+    try {
+      // Get current settings
+      const settings = await window.gameAPI.getSettings();
       
       // Create settings UI
       contentContainer.innerHTML = `
         <div class="row">
           <div class="col-md-6">
-            <div class="card">
+            <div class="card mb-4">
               <div class="card-header">
                 <h4>Game Settings</h4>
               </div>
@@ -938,35 +942,101 @@ class NavigationManager {
                   <div class="mb-3">
                     <label class="form-label">Difficulty Level</label>
                     <select class="form-select" id="difficulty-setting">
-                      <option value="easy">Easy</option>
-                      <option value="normal" selected>Normal</option>
-                      <option value="hard">Hard</option>
-                      <option value="simulation">Simulation</option>
+                      <option value="easy" ${settings.difficulty === 'easy' ? 'selected' : ''}>Easy</option>
+                      <option value="normal" ${settings.difficulty === 'normal' ? 'selected' : ''}>Normal</option>
+                      <option value="hard" ${settings.difficulty === 'hard' ? 'selected' : ''}>Hard</option>
+                      <option value="simulation" ${settings.difficulty === 'simulation' ? 'selected' : ''}>Simulation</option>
                     </select>
+                    <div class="form-text">Affects game balance, AI behavior, and financial challenges.</div>
+                  </div>
+                  
+                  <h5 class="mt-4 mb-3">Auto-Save Settings</h5>
+                  
+                  <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="autosave-enabled" 
+                           ${settings.autosave.enabled ? 'checked' : ''}>
+                    <label class="form-check-label" for="autosave-enabled">Enable Auto-Save</label>
                   </div>
                   
                   <div class="mb-3">
                     <label class="form-label">Auto-Save Frequency</label>
-                    <select class="form-select" id="autosave-setting">
-                      <option value="never">Never</option>
-                      <option value="weekly" selected>Every Week</option>
-                      <option value="monthly">Every Month</option>
-                      <option value="yearly">Every Year</option>
+                    <select class="form-select" id="autosave-frequency" 
+                            ${!settings.autosave.enabled ? 'disabled' : ''}>
+                      <option value="never" ${settings.autosave.frequency === 'never' ? 'selected' : ''}>Never</option>
+                      <option value="weekly" ${settings.autosave.frequency === 'weekly' ? 'selected' : ''}>Every Week</option>
+                      <option value="monthly" ${settings.autosave.frequency === 'monthly' ? 'selected' : ''}>Every Month</option>
+                      <option value="yearly" ${settings.autosave.frequency === 'yearly' ? 'selected' : ''}>Every Year</option>
+                    </select>
+                  </div>
+                  
+                  <h5 class="mt-4 mb-3">Simulation Settings</h5>
+                  
+                  <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="injuries-setting" 
+                           ${settings.simulation.injuries ? 'checked' : ''}>
+                    <label class="form-check-label" for="injuries-setting">Enable Injuries</label>
+                    <div class="form-text">Wrestlers can get injured during matches based on style and fatigue.</div>
+                  </div>
+                  
+                  <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="retirements-setting" 
+                           ${settings.simulation.retirements ? 'checked' : ''}>
+                    <label class="form-check-label" for="retirements-setting">Enable Retirements</label>
+                    <div class="form-text">Wrestlers can retire when they reach a certain age or after severe injuries.</div>
+                  </div>
+                  
+                  <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="random-events-setting" 
+                           ${settings.simulation.randomEvents ? 'checked' : ''}>
+                    <label class="form-check-label" for="random-events-setting">Enable Random Events</label>
+                    <div class="form-text">Unexpected events like scandals, walkouts, and surprise signings can occur.</div>
+                  </div>
+                  
+                  <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="financial-crises-setting" 
+                           ${settings.simulation.financialCrises ? 'checked' : ''}>
+                    <label class="form-check-label" for="financial-crises-setting">Enable Financial Crises</label>
+                    <div class="form-text">Random financial challenges may arise requiring tough decisions.</div>
+                  </div>
+                  
+                  <div class="d-flex justify-content-between mt-4">
+                    <button type="button" class="btn btn-secondary" id="reset-settings-btn">Reset to Defaults</button>
+                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+                    
+            <div class="card mb-4">
+              <div class="card-header">
+                <h4>Display Settings</h4>
+              </div>
+              <div class="card-body">
+                <form id="display-settings-form">
+                  <div class="mb-3">
+                    <label class="form-label">Theme</label>
+                    <select class="form-select" id="theme-setting">
+                      <option value="light" ${settings.display.theme === 'light' ? 'selected' : ''}>Light</option>
+                      <option value="dark" ${settings.display.theme === 'dark' ? 'selected' : ''}>Dark</option>
                     </select>
                   </div>
                   
                   <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" id="injuries-setting" checked>
-                    <label class="form-check-label" for="injuries-setting">Enable Injuries</label>
+                    <input class="form-check-input" type="checkbox" id="tutorials-setting" 
+                           ${settings.display.showTutorials ? 'checked' : ''}>
+                    <label class="form-check-label" for="tutorials-setting">Show Tutorials</label>
+                    <div class="form-text">Display helpful tips and guidance when using features.</div>
                   </div>
                   
                   <div class="form-check form-switch mb-3">
-                    <input class="form-check-input" type="checkbox" id="retirements-setting" checked>
-                    <label class="form-check-label" for="retirements-setting">Enable Retirements</label>
+                    <input class="form-check-input" type="checkbox" id="compact-mode-setting" 
+                           ${settings.display.compactMode ? 'checked' : ''}>
+                    <label class="form-check-label" for="compact-mode-setting">Compact Mode</label>
+                    <div class="form-text">Use a more condensed UI layout to fit more information on screen.</div>
                   </div>
                   
-                  <div class="text-end">
-                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                  <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-primary">Apply Display Settings</button>
                   </div>
                 </form>
               </div>
@@ -975,6 +1045,89 @@ class NavigationManager {
           
           <div class="col-md-6">
             <div class="card mb-4">
+              <div class="card-header">
+                <h4>Notification Settings</h4>
+              </div>
+              <div class="card-body">
+                <form id="notification-settings-form">
+                  <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="contract-notifications" 
+                           ${settings.notifications.contractExpiry ? 'checked' : ''}>
+                    <label class="form-check-label" for="contract-notifications">Contract Expiry Alerts</label>
+                    <div class="form-text">Get notified when wrestler contracts are about to expire.</div>
+                  </div>
+                  
+                  <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="injury-notifications" 
+                           ${settings.notifications.injuryUpdates ? 'checked' : ''}>
+                    <label class="form-check-label" for="injury-notifications">Injury Updates</label>
+                    <div class="form-text">Receive notifications about wrestler injuries and recovery progress.</div>
+                  </div>
+                  
+                  <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="morale-notifications" 
+                           ${settings.notifications.rosterMorale ? 'checked' : ''}>
+                    <label class="form-check-label" for="morale-notifications">Roster Morale Alerts</label>
+                    <div class="form-text">Get notifications when wrestler morale drops significantly.</div>
+                  </div>
+                  
+                  <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="financial-notifications" 
+                           ${settings.notifications.financialAlerts ? 'checked' : ''}>
+                    <label class="form-check-label" for="financial-notifications">Financial Alerts</label>
+                    <div class="form-text">Receive alerts for significant financial changes or issues.</div>
+                  </div>
+                  
+                  <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-primary">Save Notification Settings</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            
+            <div class="card mb-4">
+              <div class="card-header">
+                <h4>Audio Settings</h4>
+              </div>
+              <div class="card-body">
+                <form id="audio-settings-form">
+                  <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="audio-enabled" 
+                           ${settings.audio.enabled ? 'checked' : ''}>
+                    <label class="form-check-label" for="audio-enabled">Enable Audio</label>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label">Volume</label>
+                    <input type="range" class="form-range" id="volume-setting" min="0" max="100" 
+                           value="${settings.audio.volume * 100}" ${!settings.audio.enabled ? 'disabled' : ''}>
+                    <div class="text-end">
+                      <span id="volume-display">${Math.round(settings.audio.volume * 100)}%</span>
+                    </div>
+                  </div>
+                  
+                  <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="event-sounds-setting" 
+                           ${settings.audio.eventSounds ? 'checked' : ''} ${!settings.audio.enabled ? 'disabled' : ''}>
+                    <label class="form-check-label" for="event-sounds-setting">Event Sounds</label>
+                    <div class="form-text">Play sound effects for various game events.</div>
+                  </div>
+                  
+                  <div class="form-check form-switch mb-3">
+                    <input class="form-check-input" type="checkbox" id="background-music-setting" 
+                           ${settings.audio.backgroundMusic ? 'checked' : ''} ${!settings.audio.enabled ? 'disabled' : ''}>
+                    <label class="form-check-label" for="background-music-setting">Background Music</label>
+                    <div class="form-text">Play background music while using the application.</div>
+                  </div>
+                  
+                  <div class="text-end mt-4">
+                    <button type="submit" class="btn btn-primary">Save Audio Settings</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+            
+            <div class="card">
               <div class="card-header">
                 <h4>Save/Load Game</h4>
               </div>
@@ -992,63 +1145,211 @@ class NavigationManager {
                 </div>
               </div>
             </div>
-            
-            <div class="card">
-              <div class="card-header">
-                <h4>About</h4>
-              </div>
-              <div class="card-body">
-                <h5>Wrestling Booking Manager</h5>
-                <p>Version 1.0.0</p>
-                <p>A simulation game for wrestling bookers and promoters.</p>
-                <p>© 2025 Your Name</p>
-              </div>
-            </div>
           </div>
         </div>
       `;
       
-      // Add settings form handler
-      document.getElementById('game-settings-form')?.addEventListener('submit', (e) => {
+      // Set up event listeners for settings forms
+      this.setupSettingsEventListeners();
+      
+    } catch (error) {
+      console.error('Error loading settings:', error);
+      contentContainer.innerHTML = `
+        <div class="alert alert-danger">
+          Error loading settings. Please check the console for details.
+        </div>
+      `;
+    }
+  }
+
+  /**
+ * Set up event listeners for settings forms
+ */
+setupSettingsEventListeners() {
+    // Game settings form
+    const gameSettingsForm = document.getElementById('game-settings-form');
+    if (gameSettingsForm) {
+      gameSettingsForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        this.showNotification('Settings saved successfully', 'success');
-      });
-      
-      // Add event listeners for save/load actions
-      document.getElementById('btn-save-game-file')?.addEventListener('click', async () => {
+        
+        const newSettings = {
+          difficulty: document.getElementById('difficulty-setting').value,
+          autosave: {
+            enabled: document.getElementById('autosave-enabled').checked,
+            frequency: document.getElementById('autosave-frequency').value
+          },
+          simulation: {
+            injuries: document.getElementById('injuries-setting').checked,
+            retirements: document.getElementById('retirements-setting').checked,
+            randomEvents: document.getElementById('random-events-setting').checked,
+            financialCrises: document.getElementById('financial-crises-setting').checked
+          }
+        };
+        
         try {
-          await window.gameAPI.saveGame();
-          this.showNotification('Game saved successfully', 'success');
+          await window.gameAPI.updateSettings(newSettings);
+          this.showNotification('Game settings saved successfully', 'success');
         } catch (error) {
-          console.error('Error saving game:', error);
-          this.showNotification('Failed to save game', 'danger');
+          console.error('Error saving game settings:', error);
+          this.showNotification('Error saving game settings', 'danger');
         }
       });
-      
-      document.getElementById('btn-load-game-file')?.addEventListener('click', async () => {
+    }
+    
+    // Display settings form
+    const displaySettingsForm = document.getElementById('display-settings-form');
+    if (displaySettingsForm) {
+      displaySettingsForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const newSettings = {
+          display: {
+            theme: document.getElementById('theme-setting').value,
+            showTutorials: document.getElementById('tutorials-setting').checked,
+            compactMode: document.getElementById('compact-mode-setting').checked
+          }
+        };
+        
         try {
-          await window.gameAPI.loadGame();
-          this.showNotification('Game loaded successfully', 'success');
-          this.navigateTo('dashboard');
+          await window.gameAPI.updateSettings(newSettings);
+          this.showNotification('Display settings saved successfully', 'success');
+          
+          // Apply theme change immediately
+          if (newSettings.display.theme === 'dark') {
+            document.body.classList.add('dark-theme');
+          } else {
+            document.body.classList.remove('dark-theme');
+          }
         } catch (error) {
-          console.error('Error loading game:', error);
-          this.showNotification('Failed to load game', 'danger');
+          console.error('Error saving display settings:', error);
+          this.showNotification('Error saving display settings', 'danger');
         }
       });
+    }
+    
+    // Notification settings form
+    const notificationSettingsForm = document.getElementById('notification-settings-form');
+    if (notificationSettingsForm) {
+      notificationSettingsForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const newSettings = {
+          notifications: {
+            contractExpiry: document.getElementById('contract-notifications').checked,
+            injuryUpdates: document.getElementById('injury-notifications').checked,
+            rosterMorale: document.getElementById('morale-notifications').checked,
+            financialAlerts: document.getElementById('financial-notifications').checked
+          }
+        };
+        
+        try {
+          await window.gameAPI.updateSettings(newSettings);
+          this.showNotification('Notification settings saved successfully', 'success');
+        } catch (error) {
+          console.error('Error saving notification settings:', error);
+          this.showNotification('Error saving notification settings', 'danger');
+        }
+      });
+    }
+    
+    // Audio settings form
+    const audioSettingsForm = document.getElementById('audio-settings-form');
+    if (audioSettingsForm) {
+      // Update volume display when slider changes
+      const volumeSlider = document.getElementById('volume-setting');
+      const volumeDisplay = document.getElementById('volume-display');
+      if (volumeSlider && volumeDisplay) {
+        volumeSlider.addEventListener('input', () => {
+          volumeDisplay.textContent = `${volumeSlider.value}%`;
+        });
+      }
       
-      document.getElementById('btn-new-game')?.addEventListener('click', async () => {
-        if (confirm('Are you sure you want to start a new game? All unsaved progress will be lost.')) {
+      // Enable/disable audio controls based on audio enabled checkbox
+      const audioEnabled = document.getElementById('audio-enabled');
+      if (audioEnabled) {
+        audioEnabled.addEventListener('change', () => {
+          const isEnabled = audioEnabled.checked;
+          document.getElementById('volume-setting').disabled = !isEnabled;
+          document.getElementById('event-sounds-setting').disabled = !isEnabled;
+          document.getElementById('background-music-setting').disabled = !isEnabled;
+        });
+      }
+      
+      // Save audio settings
+      audioSettingsForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const newSettings = {
+          audio: {
+            enabled: document.getElementById('audio-enabled').checked,
+            volume: parseInt(document.getElementById('volume-setting').value) / 100,
+            eventSounds: document.getElementById('event-sounds-setting').checked,
+            backgroundMusic: document.getElementById('background-music-setting').checked
+          }
+        };
+        
+        try {
+          await window.gameAPI.updateSettings(newSettings);
+          this.showNotification('Audio settings saved successfully', 'success');
+        } catch (error) {
+          console.error('Error saving audio settings:', error);
+          this.showNotification('Error saving audio settings', 'danger');
+        }
+      });
+    }
+    
+    // Reset settings button
+    const resetButton = document.getElementById('reset-settings-btn');
+    if (resetButton) {
+      resetButton.addEventListener('click', async () => {
+        if (confirm('Are you sure you want to reset all settings to their default values?')) {
           try {
-            await window.gameAPI.newGame();
-            this.showNotification('New game started', 'success');
-            this.navigateTo('dashboard');
+            await window.gameAPI.resetSettings();
+            this.showNotification('Settings reset to defaults', 'success');
+            this.loadSettings(); // Reload settings page
           } catch (error) {
-            console.error('Error starting new game:', error);
-            this.showNotification('Failed to start new game', 'danger');
+            console.error('Error resetting settings:', error);
+            this.showNotification('Error resetting settings', 'danger');
           }
         }
       });
     }
+    
+    // Save/load game buttons
+    document.getElementById('btn-save-game-file')?.addEventListener('click', async () => {
+      try {
+        await window.gameAPI.saveGame();
+        this.showNotification('Game saved successfully', 'success');
+      } catch (error) {
+        console.error('Error saving game:', error);
+        this.showNotification('Failed to save game', 'danger');
+      }
+    });
+    
+    document.getElementById('btn-load-game-file')?.addEventListener('click', async () => {
+      try {
+        await window.gameAPI.loadGame();
+        this.showNotification('Game loaded successfully', 'success');
+        this.navigateTo('dashboard');
+      } catch (error) {
+        console.error('Error loading game:', error);
+        this.showNotification('Failed to load game', 'danger');
+      }
+    });
+    
+    document.getElementById('btn-new-game')?.addEventListener('click', async () => {
+      if (confirm('Are you sure you want to start a new game? All unsaved progress will be lost.')) {
+        try {
+          await window.gameAPI.newGame();
+          this.showNotification('New game started', 'success');
+          this.navigateTo('dashboard');
+        } catch (error) {
+          console.error('Error starting new game:', error);
+          this.showNotification('Failed to start new game', 'danger');
+        }
+      }
+    });
+  }
   
     // Utility methods
     
@@ -1677,6 +1978,44 @@ class NavigationManager {
   async runEvent(id) {
     // Placeholder for run event functionality
     this.showNotification('Run event functionality not implemented yet', 'info');
+  }
+
+  /**
+ * Apply theme based on settings
+ * @param {Object} settings - Game settings object
+ */
+async applyTheme(settings = null) {
+    if (!settings) {
+      try {
+        settings = await window.gameAPI.getSettings();
+      } catch (error) {
+        console.error('Error loading settings for theme:', error);
+        return;
+      }
+    }
+    
+    if (settings.display && settings.display.theme === 'dark') {
+      document.body.classList.add('dark-theme');
+    } else {
+      document.body.classList.remove('dark-theme');
+    }
+  }
+  
+  /**
+   * Initialize the navigation system
+   */
+  init() {
+    // Create navigation sidebar
+    this.createNavigationSidebar();
+    
+    // Set up event listeners
+    this.setupEventListeners();
+    
+    // Apply theme from settings
+    this.applyTheme();
+    
+    // Load default section (dashboard)
+    this.navigateTo('dashboard');
   }
 }
 

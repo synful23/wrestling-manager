@@ -166,3 +166,16 @@ ipcMain.handle('advance-week', () => {
   gameStore.saveGame();
   return result;
 });
+
+// Settings handlers
+ipcMain.handle('get-settings', () => {
+  return gameStore.getSettings().toJSON();
+});
+
+ipcMain.handle('update-settings', (event, newSettings) => {
+  return gameStore.updateSettings(newSettings);
+});
+
+ipcMain.handle('reset-settings', () => {
+  return gameStore.resetSettings();
+});
